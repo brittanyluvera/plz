@@ -3,81 +3,83 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Please</title>
+    <title>Snow Day Magic ❄️</title>
 
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #ffe0e9, #fff);
+        margin: 0;
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
+        background: radial-gradient(circle at top, #ffd6e8, #ff9eb5);
+        font-family: "Segoe UI", sans-serif;
         overflow: hidden;
       }
 
+      /* BUTTON */
       button {
-        padding: 14px 28px;
-        font-size: 18px;
-        cursor: pointer;
+        padding: 15px 30px;
+        font-size: 20px;
         border: none;
-        border-radius: 8px;
-        background-color: #ff4d6d;
-        color: white;
-        transition: 0.3s ease;
+        border-radius: 50px;
+        background: white;
+        color: #ff4d88;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
       }
-
       button:hover {
-        background-color: #ff1e4d;
+        transform: scale(1.1);
       }
 
+      /* POPUP */
       .popup {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(0);
         background: white;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        border-radius: 20px;
         text-align: center;
-        transition: 0.3s ease;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transition: 0.4s ease;
+        width: 320px;
         z-index: 10;
       }
-
       .popup.show {
         transform: translate(-50%, -50%) scale(1);
       }
 
-      .overlay {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        top: 0;
-        left: 0;
-        opacity: 0;
-        pointer-events: none;
-        transition: 0.3s;
-      }
-
-      .overlay.show {
-        opacity: 1;
-        pointer-events: all;
-      }
-
+      /* FLOATING HEARTS */
       .heart {
         position: fixed;
-        bottom: -20px;
-        font-size: 24px;
-        animation: floatUp 4s linear forwards;
+        bottom: -10px;
+        font-size: 20px;
+        animation: floatUp 6s linear infinite;
+        opacity: 0.8;
       }
-
       @keyframes floatUp {
         to {
           transform: translateY(-110vh);
           opacity: 0;
+        }
+      }
+
+      /* SNOW */
+      .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        font-size: 10px;
+        user-select: none;
+        pointer-events: none;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(110vh);
         }
       }
 
@@ -91,86 +93,81 @@
   </head>
 
   <body>
-    <button id="special-button">Click me 💕</button>
-
-    <div class="overlay" id="overlay"></div>
+    <button id="special-button">Click me, Brittany 💕</button>
 
     <div class="popup" id="popup">
-      <h2>Hooray! 🎉</h2>
-      <p>Now you have to spend the snow day with Brittany! ❄️💖</p>
-      <button id="close-btn">Close</button>
+      <h2>Snow Day Magic ❄️✨</h2>
+      <p>You’re officially stuck spending the snow day with me 💖</p>
+      <br />
+      <button onclick="closePopup()">Forever & Always 💌</button>
     </div>
 
     <canvas id="confetti"></canvas>
 
+    <audio id="music" loop>
+      <source
+        src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9d10b1d925.mp3"
+        type="audio/mp3"
+      />
+    </audio>
+
     <script>
       const button = document.getElementById("special-button");
       const popup = document.getElementById("popup");
-      const overlay = document.getElementById("overlay");
-      const closeBtn = document.getElementById("close-btn");
-      const canvas = document.getElementById("confetti");
-      const ctx = canvas.getContext("2d");
-
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      let confettiPieces = [];
-
-      function createConfetti() {
-        for (let i = 0; i < 150; i++) {
-          confettiPieces.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height - canvas.height,
-            size: Math.random() * 8 + 4,
-            speed: Math.random() * 3 + 2,
-            color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-          });
-        }
-      }
-
-      function drawConfetti() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        confettiPieces.forEach((p) => {
-          ctx.fillStyle = p.color;
-          ctx.fillRect(p.x, p.y, p.size, p.size);
-          p.y += p.speed;
-        });
-        requestAnimationFrame(drawConfetti);
-      }
-
-      function createHearts() {
-        for (let i = 0; i < 20; i++) {
-          const heart = document.createElement("div");
-          heart.classList.add("heart");
-          heart.innerHTML = "💖";
-          heart.style.left = Math.random() * 100 + "vw";
-          heart.style.fontSize = Math.random() * 20 + 20 + "px";
-          heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-          document.body.appendChild(heart);
-
-          setTimeout(() => heart.remove(), 4000);
-        }
-      }
+      const music = document.getElementById("music");
 
       button.addEventListener("click", () => {
         popup.classList.add("show");
-        overlay.classList.add("show");
-        createHearts();
-        createConfetti();
-        drawConfetti();
+        music.play();
+        burstConfetti();
       });
 
-      closeBtn.addEventListener("click", () => {
+      function closePopup() {
         popup.classList.remove("show");
-        overlay.classList.remove("show");
-        confettiPieces = [];
-      });
+      }
 
-      overlay.addEventListener("click", () => {
-        popup.classList.remove("show");
-        overlay.classList.remove("show");
-        confettiPieces = [];
-      });
+      /* HEARTS */
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+      setInterval(createHeart, 700);
+
+      /* SNOW EFFECT */
+      function createSnowflake() {
+        const snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.innerHTML = "❄";
+        snowflake.style.left = Math.random() * 100 + "vw";
+        snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.body.appendChild(snowflake);
+        setTimeout(() => snowflake.remove(), 5000);
+      }
+      setInterval(createSnowflake, 100);
+
+      /* CONFETTI */
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      function burstConfetti() {
+        for (let i = 0; i < 200; i++) {
+          ctx.fillStyle = `hsl(${Math.random() * 360},100%,50%)`;
+          ctx.fillRect(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height,
+            6,
+            6,
+          );
+        }
+      }
     </script>
   </body>
 </html>
